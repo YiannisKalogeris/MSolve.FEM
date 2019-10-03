@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MGroup.FEM.Entities;
 using MGroup.FEM.Interfaces;
@@ -33,6 +33,17 @@ namespace MGroup.FEM.Elements
 		private DynamicMaterial dynamicProperties;
 		private readonly IReadOnlyList<ElasticMaterial3D> materialsAtGaussPoints;
 
+
+		/// <summary>
+		/// Defines a three-dimensional continuum element.
+		/// </summary>
+		/// <param name="nodes">The element nodes.</param>
+		/// <param name="interpolation"> The interpolation method of the element.</param>
+		/// <param name="quadratureForStiffness">A quadrature rule for calculating the elemental stiffness matrix.</param>
+		/// <param name="quadratureForMass">A quadrature rule for calculating the elemental mass matrix.</param>
+		/// <param name="gaussPointExtrapolation">A rule for extrapolating Gauss point values to the element nodes.</param>
+		/// <param name="materialsAtGaussPoints">a <see cref="List{T}"/> of materials for each one of the Gauss points.</param>
+		/// <param name="dynamicProperties">The dynamic properties of the element.</param>
 		public ContinuumElement3D(IReadOnlyList<Node> nodes, IIsoparametricInterpolation3D interpolation,
 			IQuadrature3D quadratureForStiffness, IQuadrature3D quadratureForMass,
 			IGaussPointExtrapolation3D gaussPointExtrapolation,
@@ -56,17 +67,48 @@ namespace MGroup.FEM.Elements
 			}
 		}
 
+		/// <summary>
+		/// Retrieves the type of the finite element used.
+		/// </summary>
 		public CellType CellType => Interpolation.CellType;
+
+		/// <summary>
+		/// Defines the way that elemental degrees of freedom will be enumerated.
+		/// For further info see <see cref="IElementDofEnumerator"/>.
+		/// </summary>
 		public IElementDofEnumerator DofEnumerator { get; set; } = new GenericDofEnumerator();
+
+		/// <summary>
+		/// Dimensionality of the element.
+		/// </summary>
 		public ElementDimensions ElementDimensions => ElementDimensions.ThreeD;
+
+		/// <summary>
+		/// Returns the rule for extrapolating Gauss point values to the element nodes.
+		/// </summary>
 		public IGaussPointExtrapolation3D GaussPointExtrapolation { get; }
+
+		/// <summary>
+		/// Retrieves the dofs of the element.
+		/// </summary>
+		/// <param name="element">An element of type <see cref="ContinuumElement3D"/>.</param>
+		/// <returns>A <see cref="IReadOnlyList{T}"/> that contains a <see cref="IReadOnlyList{T}"/> of <see cref="IDofType"/> with degrees of freedom for each elemental <see cref="Node"/>.</returns>
 		public IReadOnlyList<IReadOnlyList<IDofType>> GetElementDofTypes(IElement element) => dofTypes;
 
+		/// <summary>
+		/// The element ID.
+		/// </summary>
 		public int ID => throw new NotImplementedException(
 			"Element type codes should be in a settings class. Even then it's a bad design choice");
 
+		/// <summary>
+		/// The interpolation function used for the element.
+		/// </summary>
 		public IIsoparametricInterpolation3D Interpolation { get; }
 
+		/// <summary>
+		/// Boolean denoting if the material of the element has been modified.
+		/// </summary>
 		public bool MaterialModified
 		{
 			get
@@ -79,10 +121,25 @@ namespace MGroup.FEM.Elements
 			}
 		}
 
+		/// <summary>
+		/// A <see cref="List{T}"/> of the Nodes of the element.
+		/// </summary>
 		public IReadOnlyList<Node> Nodes { get; }
+
+		/// <summary>
+		/// The quadrature rule for calculating the mass matrix.
+		/// </summary>
 		public IQuadrature3D QuadratureForConsistentMass { get; }
+
+		/// <summary>
+		/// The quadrature rule for calculating the stiffness matrix.
+		/// </summary>
 		public IQuadrature3D QuadratureForStiffness { get; }
 
+		/// <summary>
+		/// Builds the element consistent mass matrix.
+		/// </summary>
+		/// <returns>A <see cref="Matrix"/>.</returns>
 		public Matrix BuildConsistentMassMatrix()
 		{
 			int numberOfDofs = 3 * Nodes.Count;
@@ -104,6 +161,10 @@ namespace MGroup.FEM.Elements
 			return mass;
 		}
 
+		/// <summary>
+		/// Builds the element lumped mass matrix.
+		/// </summary>
+		/// <returns>A <see cref="Matrix"/>.</returns>
 		public Matrix BuildLumpedMassMatrix()
 		{
 			int numberOfDofs = 3 * Nodes.Count;
@@ -124,6 +185,10 @@ namespace MGroup.FEM.Elements
 			return lumpedMass;
 		}
 
+		/// <summary>
+		/// Calculates the stiffness matrix of the element.
+		/// </summary>
+		/// <returns>An <see cref="IMatrix"/> containing the stiffness matrix of an <see cref="ContinuumElement3D"/>.</returns>
 		public IMatrix BuildStiffnessMatrix()
 		{
 			int numberOfDofs = 3 * Nodes.Count;
@@ -147,6 +212,12 @@ namespace MGroup.FEM.Elements
 			return DofEnumerator.GetTransformedMatrix(stiffness);
 		}
 
+		/// <summary>
+		/// Calculates the forces applies to an <see cref="ContinuumElement3D"/> due to <see cref="MassAccelerationLoad"/>.
+		/// </summary>
+		/// <param name="element">An element of type <see cref="ContinuumElement3D"/>.</param>
+		/// <param name="loads">A list of <see cref="MassAccelerationLoad"/>. For more info see <seealso cref="MassAccelerationLoad"/>.</param>
+		/// <returns>A <see cref="double"/> array containing the forces generates due to acceleration for each degree of freedom.</returns>
 		public double[] CalculateAccelerationForces(IElement element, IList<MassAccelerationLoad> loads)
 		{
 			int numberOfDofs = 3 * Nodes.Count;
@@ -169,29 +240,48 @@ namespace MGroup.FEM.Elements
 			return massMatrix.Multiply(accelerations);
 		}
 
+		/// <summary>
+		/// This method calculates the internal forces of the element.
+		/// </summary>
+		/// <param name="element">An element of type <see cref="ContinuumElement3D"/>.</param>
+		/// <param name="localTotalDisplacements">A <see cref="double"/> array containing the displacements for the degrees of freedom of the element.</param>
+		/// <param name="localDisplacements">A <see cref="double"/> array containing the displacements change for the degrees of freedom of the element.</param>
+		/// <returns>A <see cref="double"/> array containing the forces all degrees of freedom.</returns>
 		public double[] CalculateForces(IElement element, double[] localTotalDisplacements, double[] localDisplacements)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// This method is used for retrieving the internal forces of the element for logging purposes.
+		/// </summary>
+		/// <param name="element">An element of type <see cref="ContinuumElement3D"/>.</param>
+		/// <param name="localDisplacements">A <see cref="double"/> array containing the displacements for the degrees of freedom of the element.</param>
+		/// <returns>A <see cref="double"/> array containing the forces all degrees of freedom.</returns>
 		public double[] CalculateForcesForLogging(IElement element, double[] localDisplacements)
 		{
 			return CalculateForces(element, localDisplacements, new double[localDisplacements.Length]);
 		}
 
+		/// <summary>
+		/// This method calculates the stresses of the element.
+		/// </summary>
+		/// <param name="element">An element of type <see cref="ContinuumElement3D"/>.</param>
+		/// <param name="localDisplacements">A <see cref="double"/> array containing the displacements for the degrees of freedom of the element.</param>
+		/// <param name="localdDisplacements">A <see cref="double"/> array containing the displacements change for the degrees of freedom of the element.</param>
+		/// <returns>A <see cref="Tuple{T1,T2}"/> of the stresses and strains of the element.</returns>
 		public Tuple<double[], double[]> CalculateStresses(IElement element, double[] localDisplacements,
 			double[] localdDisplacements)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Calculates the volume of the element.
+		/// </summary>
+		/// <returns>The volume as a <see cref="double"/>.</returns>
 		public double CalculateVolume()
 		{
-			//TODO: Linear elements can use the more efficient rules for volume of polygons. Therefore this method should be 
-			//      delegated to the interpolation.
-			//TODO: A different integration rule should be used for integrating constant functions. For linear elements there
-			//      is only 1 Gauss point (most probably), therefore the computational cost could be the same as using the 
-			//      polygonal formulas.
 			double volume = 0.0;
 			IReadOnlyList<Matrix> shapeGradientsNatural =
 				Interpolation.EvaluateNaturalGradientsAtGaussPoints(QuadratureForStiffness);
@@ -203,16 +293,27 @@ namespace MGroup.FEM.Elements
 			return volume;
 		}
 
+		/// <summary>
+		/// Clear the material state of the element.
+		/// </summary>
 		public void ClearMaterialState()
 		{
 			foreach (var material in materialsAtGaussPoints) material.ClearState();
 		}
 
+		/// <summary>
+		/// Clear any saved material stresses of the element.
+		/// </summary>
 		public void ClearMaterialStresses()
 		{
 			foreach (var material in materialsAtGaussPoints) material.ClearStresses();
 		}
 
+		/// <summary>
+		/// Calculates the damping matrix of the element.
+		/// </summary>
+		/// <param name="element">>An element of type <see cref="ContinuumElement3D"/>.</param>
+		/// <returns>An <see cref="IMatrix"/> containing the damping matrix of an <see cref="ContinuumElement3D"/>.</returns>
 		public IMatrix DampingMatrix(IElement element)
 		{
 			IMatrix damping = BuildStiffnessMatrix();
@@ -227,24 +328,45 @@ namespace MGroup.FEM.Elements
 		public CartesianPoint FindCentroid()
 			=> Interpolation.TransformNaturalToCartesian(Nodes, new NaturalPoint(0.0, 0.0, 0.0));
 
-
+		/// <summary>
+		/// Calculates the mass matrix of the element.
+		/// </summary>
+		/// <param name="element">>An element of type <see cref="ContinuumElement3D"/>.</param>
+		/// <returns>An <see cref="IMatrix"/> containing the mass matrix of an <see cref="ContinuumElement3D"/>.</returns>
 		public IMatrix MassMatrix(IElement element)
 		{
 			return BuildLumpedMassMatrix();
 		}
 
+		/// <summary>
+		/// Resets any saved material states of the element to its initial state.
+		/// </summary>
 		public void ResetMaterialModified()
 		{
 			foreach (var material in materialsAtGaussPoints) material.ResetModified();
 		}
 
+		/// <summary>
+		/// Save the current material state of the element.
+		/// </summary>
 		public void SaveMaterialState()
 		{
 			foreach (var m in materialsAtGaussPoints) m.SaveState();
 		}
 
+		/// <summary>
+		/// Calculates the stiffness matrix of the element.
+		/// </summary>
+		/// <param name="element">>An element of type <see cref="ContinuumElement3D"/>.</param>
+		/// <returns>An <see cref="IMatrix"/> containing the stiffness matrix of an <see cref="ContinuumElement3D"/>.</returns>
 		public IMatrix StiffnessMatrix(IElement element) => DofEnumerator.GetTransformedMatrix(BuildStiffnessMatrix());
 
+
+		/// <summary>
+		/// Updates the strains and stresses at the Gauss Points.
+		/// </summary>
+		/// <param name="localDisplacements">The nodal displacements.</param>
+		/// <returns>Two <see cref="IReadOnlyList{T}"/> with the strains and stresses of the Gauss points.</returns>
 		public (IReadOnlyList<double[]> strains, IReadOnlyList<double[]> stresses)
 			UpdateStrainStressesAtGaussPoints(double[] localDisplacements)
 		{
@@ -272,10 +394,10 @@ namespace MGroup.FEM.Elements
 		/// <summary>
 		/// Assembles the deformation matrix of a solid element.
 		/// The calculation are based on <see cref="https://www.colorado.edu/engineering/CAS/courses.d/AFEM.d/AFEM.Ch08.d/AFEM.Ch08.pdf"/>
-		/// paragraph 8.4, equation 8.7
+		/// paragraph 8.4, equation 8.7.
 		/// </summary>
-		/// <param name="shapeGradients"></param>
-		/// <returns></returns>
+		/// <param name="shapeGradientsCartesian">A <see cref="Matrix"/> containing the cartesian shape function gradients.</param>
+		/// <returns>A <see cref="Matrix"/> containing the deformation matrix.</returns>
 		private Matrix BuildDeformationMatrix(Matrix shapeGradientsCartesian)
 		{
 			var deformation = Matrix.CreateZero(6, 3 * Nodes.Count);

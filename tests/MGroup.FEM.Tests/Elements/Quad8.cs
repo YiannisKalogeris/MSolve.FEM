@@ -135,63 +135,63 @@ namespace MGroup.FEM.Tests.Elements
 			double[] displacements =
 			{
 				0.0, 0.0,                   // Node 1
-                0.0, 0.0,                   // Node 2
-                -6.1872E-03, -1.3677E-02,   // Node 3
-                2.1193E-02, -6.0952E-02,    // Node 4
-                -6.4016E-03, -2.9598E-03,   // Node 5
-                -9.8052E-03, -7.6739E-03,   // Node 6
-                2.0961E-03, -2.4904E-02,    // Node 7
-                1.2842E-02, -2.0029E-02     // Node 8
-            };
+				0.0, 0.0,                   // Node 2
+				-6.1872E-03, -1.3677E-02,   // Node 3
+				2.1193E-02, -6.0952E-02,    // Node 4
+				-6.4016E-03, -2.9598E-03,   // Node 5
+				-9.8052E-03, -7.6739E-03,   // Node 6
+				2.0961E-03, -2.4904E-02,    // Node 7
+				1.2842E-02, -2.0029E-02     // Node 8
+			};
 
 			double[][] expectedStrainsAtGPs =
 			{
 				new double[] {  5.0483E-03,  9.3636E-04,  1.3684E-03 },  // Gauss point 1
-                new double[] {  4.4925E-04,  6.0911E-04, -1.1381E-03 },  // Gauss point 2
-                new double[] { -1.0021E-02,  3.7130E-04, -6.7670E-03 },  // Gauss point 3
-                new double[] {  3.0367E-03, -4.2664E-03, -6.6618E-03 },  // Gauss point 4
-                new double[] {  7.6921E-04, -2.1368E-03, -5.1775E-03 },  // Gauss point 5
-                new double[] { -2.5482E-03,  1.8783E-03, -6.8114E-03 },  // Gauss point 6
-                new double[] {  1.2133E-03, -2.1843E-05, -1.4123E-02 },  // Gauss point 7
-                new double[] { -4.6295E-03, -1.0028E-02, -4.5072E-03 },  // Gauss point 8
-                new double[] {  4.6685E-03, -2.5173E-03, -3.6237E-03 }   // Gauss point 9
-            };
+				new double[] {  4.4925E-04,  6.0911E-04, -1.1381E-03 },  // Gauss point 2
+				new double[] { -1.0021E-02,  3.7130E-04, -6.7670E-03 },  // Gauss point 3
+				new double[] {  3.0367E-03, -4.2664E-03, -6.6618E-03 },  // Gauss point 4
+				new double[] {  7.6921E-04, -2.1368E-03, -5.1775E-03 },  // Gauss point 5
+				new double[] { -2.5482E-03,  1.8783E-03, -6.8114E-03 },  // Gauss point 6
+				new double[] {  1.2133E-03, -2.1843E-05, -1.4123E-02 },  // Gauss point 7
+				new double[] { -4.6295E-03, -1.0028E-02, -4.5072E-03 },  // Gauss point 8
+				new double[] {  4.6685E-03, -2.5173E-03, -3.6237E-03 }   // Gauss point 9
+			};
 			double[][] expectedStressesAtGPs =
 			{
 				new double[] {  1230.00,   565.60,    110.50 },  // Gauss point 1
-                new double[] {   145.80,   171.70,    -91.92 },  // Gauss point 2
-                new double[] { -2287.00,  -608.10,   -546.60 },  // Gauss point 3
-                new double[] {   405.40,  -774.30,   -538.10 },  // Gauss point 4
-                new double[] {    29.58,  -439.80,   -418.20 },  // Gauss point 5
-                new double[] {  -458.00,   257.00,   -550.20 },  // Gauss point 6
-                new double[] {   278.50,    78.95,  -1141.00 },  // Gauss point 7
-                new double[] { -1763.00, -2635.00,   -364.00 },  // Gauss point 8
-                new double[] {   903.10,  -257.70,   -292.70 }  // Gauss point 9
-            };
+				new double[] {   145.80,   171.70,    -91.92 },  // Gauss point 2
+				new double[] { -2287.00,  -608.10,   -546.60 },  // Gauss point 3
+				new double[] {   405.40,  -774.30,   -538.10 },  // Gauss point 4
+				new double[] {    29.58,  -439.80,   -418.20 },  // Gauss point 5
+				new double[] {  -458.00,   257.00,   -550.20 },  // Gauss point 6
+				new double[] {   278.50,    78.95,  -1141.00 },  // Gauss point 7
+				new double[] { -1763.00, -2635.00,   -364.00 },  // Gauss point 8
+				new double[] {   903.10,  -257.70,   -292.70 }  // Gauss point 9
+			};
 
 			// The order of the nodes is the same (at least in this job)
 			double[][] expectedStrainsAtNodes =
 			{
 				new double[] {  6.5625E-03,  5.7325E-03,  3.8681E-03 },  // Node 1
-                new double[] { -1.6562E-02, -1.2399E-03, -8.9890E-03 },  // Node 2
-                new double[] {  1.4923E-02,  2.1676E-03, -3.8448E-03 },  // Node 3
-                new double[] {  7.1739E-03,  1.2357E-02, -2.2045E-02 },  // Node 4
-                new double[] { -7.1803E-04,  4.4174E-04,  9.2207E-04 },  // Node 5
-                new double[] { -3.7108E-03,  3.4008E-03, -7.8726E-03 },  // Node 6
-                new double[] { -7.2747E-03, -1.3290E-02, -3.4274E-03 },  // Node 7
-                new double[] {  3.4993E-03, -4.5319E-03, -7.6795E-03 }  // Node 8
-            };
+				new double[] { -1.6562E-02, -1.2399E-03, -8.9890E-03 },  // Node 2
+				new double[] {  1.4923E-02,  2.1676E-03, -3.8448E-03 },  // Node 3
+				new double[] {  7.1739E-03,  1.2357E-02, -2.2045E-02 },  // Node 4
+				new double[] { -7.1803E-04,  4.4174E-04,  9.2207E-04 },  // Node 5
+				new double[] { -3.7108E-03,  3.4008E-03, -7.8726E-03 },  // Node 6
+				new double[] { -7.2747E-03, -1.3290E-02, -3.4274E-03 },  // Node 7
+				new double[] {  3.4993E-03, -4.5319E-03, -7.6795E-03 }  // Node 8
+			};
 			double[][] expectedStressesAtNodes =
 			{
 				new double[] {  1911.0,  1777.00,   312.40 },  // Node 1
-                new double[] { -3908.0, -1433.00,  -726.00 },  // Node 2
-                new double[] {  3594.0,  1533.00,  -310.50 },  // Node 3
-                new double[] {  2511.0,  3348.00, -1781.00 },  // Node 4
-                new double[] {  -135.1,    52.23,    74.47 },  // Node 5
-                new double[] {  -620.9,   527.90,  -635.90 },  // Node 6
-                new double[] { -2599.0, -3571.00,  -276.80 },  // Node 7
-                new double[] {   493.8, - 803.60,  -620.30 }   // Node 8
-            };
+				new double[] { -3908.0, -1433.00,  -726.00 },  // Node 2
+				new double[] {  3594.0,  1533.00,  -310.50 },  // Node 3
+				new double[] {  2511.0,  3348.00, -1781.00 },  // Node 4
+				new double[] {  -135.1,    52.23,    74.47 },  // Node 5
+				new double[] {  -620.9,   527.90,  -635.90 },  // Node 6
+				new double[] { -2599.0, -3571.00,  -276.80 },  // Node 7
+				new double[] {   493.8, - 803.60,  -620.30 }   // Node 8
+			};
 
 			(IReadOnlyList<double[]> strainsAtGPs, IReadOnlyList<double[]> stressesAtGPs) =
 				quad8.UpdateStrainsStressesAtGaussPoints(displacements);

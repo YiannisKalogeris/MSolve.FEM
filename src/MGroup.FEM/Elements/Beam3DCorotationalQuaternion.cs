@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MGroup.FEM.Elements.SupportiveClasses;
 using MGroup.FEM.Entities;
@@ -8,6 +8,9 @@ using MGroup.MSolve.Geometry;
 
 namespace MGroup.FEM.Elements
 {
+	/// <summary>
+	/// An class that defines the basics of a Beam3D corotational quaternion element.
+	/// </summary>
 	public class Beam3DCorotationalQuaternion : Beam3DCorotationalAbstract
 	{
 		private readonly double[] lastDisplacements;
@@ -22,18 +25,13 @@ namespace MGroup.FEM.Elements
 		private Quaternion quaternionLastNodeA;
 		private Quaternion quaternionLastNodeB;
 
-		/**
-         * Creates a new instance of {@link Beam3DCorotationalIncremental} class.
-         *
-         * @param nodes
-         *            The element nodes
-         * @param material
-         *            The element material
-         * @param density
-         *            The element density
-         * @param beamSection
-         *            The beam section.
-         */
+		/// <summary>
+		/// Defines a <see cref="Beam2DCorotational"/>.
+		/// </summary>
+		/// <param name="nodes">A list containing the nodes of the <see cref="Beam3DCorotationalQuaternion"/> element.</param>
+		/// <param name="material">The material used for the analysis of the <see cref="Beam3DCorotationalQuaternion"/> element.</param>
+		/// <param name="density">The density of the element.</param>
+		/// <param name="beamSection">The section of beam element.</param>
 		public Beam3DCorotationalQuaternion(IList<Node> nodes, IIsotropicContinuumMaterial3D material, double density,
 			BeamSection3D beamSection)
 			: base(nodes, material, density, beamSection)
@@ -52,10 +50,12 @@ namespace MGroup.FEM.Elements
 			this.InitializeElementAxes();
 		}
 
+		/// <summary>
+		/// Saves the geometry state of the element.
+		/// </summary>
 		public override void SaveGeometryState()
 		{
 			displacementsOfCurrentIncrement.Clear();
-			//displacementsOfCurrentIncrement.ScaleIntoThis(0d); 
 			lastDisplacements.CopyFrom(currentDisplacements);
 
 			double[] qA = quaternionCurrentNodeA.VectorPart.Copy();
@@ -64,13 +64,12 @@ namespace MGroup.FEM.Elements
 			this.quaternionLastNodeB = new Quaternion(quaternionCurrentNodeB.ScalarPart, qB);
 		}
 
+		/// <summary>
+		/// Updates the current state of the element.
+		/// </summary>
+		/// <param name="incrementalNodeDisplacements">A double array containing the incremental load displacements.</param>
 		public override void UpdateState(double[] incrementalNodeDisplacements)
 		{
-			//displacementsOfCurrentIncrement.Add(new Vector(incrementalNodeDisplacements));
-			//lastDisplacements.CopyTo(currentDisplacements.Data, 0);
-			//currentDisplacements.Add(displacementsOfCurrentIncrement);
-
-			//this.currentDisplacements.addIntoThis(this.lastDisplacements, incrementalNodeDisplacements);
 			currentDisplacements.CopyFrom(lastDisplacements);
 			currentDisplacements.AddIntoThis(incrementalNodeDisplacements);
 			displacementsOfCurrentIncrement.CopyFrom(incrementalNodeDisplacements);
@@ -107,7 +106,6 @@ namespace MGroup.FEM.Elements
 			double[] vectorPartDifference = vectorPartB.Copy();
 			vectorPartDifference.ScaleIntoThis(scalarA);
 			vectorPartDifference.AddIntoThis(vectorPartA.Scale(-scalarB));
-			//vectorPartDifference.doPointwise(vectorPartA, DoubleBinaryOps.alphaPlusScaledBeta(-scalarB));
 			vectorPartDifference.AddIntoThis(vectorPartA.CrossProduct(vectorPartB));
 			vectorPartDifference.ScaleIntoThis(1d / (2d * scalarPartDifference));
 			var meanRotationQuaternion = Quaternion.CreateFromIndividualParts(meanRotationScalarPart, meanRotationVectorPart);
@@ -115,8 +113,6 @@ namespace MGroup.FEM.Elements
 			this.CalculateUpdatedBeamAxis();
 			this.UpdateRotationMatrix();
 			this.UpdateNaturalDeformations(vectorPartDifference);
-
-			//SaveGeometryState();
 		}
 
 		private void CalculateUpdatedBeamAxis()

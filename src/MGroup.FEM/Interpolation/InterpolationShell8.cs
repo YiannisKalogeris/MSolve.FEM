@@ -16,8 +16,8 @@ namespace MGroup.FEM.Interpolation
 		{
 			NodalNaturalCoordinates = new NaturalPoint[]
 			{
-                //TODO: validate this
-                new NaturalPoint(1, 1, 0),
+				//TODO: validate this
+				new NaturalPoint(1, 1, 0),
 				new NaturalPoint(-1, 1, 0),
 				new NaturalPoint(-1, -1, 0),
 				new NaturalPoint(1, -1, 0),

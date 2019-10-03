@@ -6,13 +6,13 @@
 		private readonly double inertia;
 
 		/**
-         * Creates a new instance of {@link BeamSection2D} class.
-         *
-         * @param area
-         *            Section area
-         * @param inertia
-         *            Moment of inertia
-         */
+		 * Creates a new instance of {@link BeamSection2D} class.
+		 *
+		 * @param area
+		 *            Section area
+		 * @param inertia
+		 *            Moment of inertia
+		 */
 		public BeamSection2D(double area, double inertia)
 		{
 			this.area = area;

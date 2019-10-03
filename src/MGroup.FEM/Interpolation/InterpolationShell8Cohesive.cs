@@ -20,8 +20,8 @@ namespace MGroup.FEM.Interpolation
 			cachedN3AtGPs = new Dictionary<IQuadrature2D, IReadOnlyList<Matrix>>();
 			NodalNaturalCoordinates = new NaturalPoint[]
 			{
-                //TODO: validate this
-                new NaturalPoint(1, 1),
+				//TODO: validate this
+				new NaturalPoint(1, 1),
 				new NaturalPoint(-1, 1),
 				new NaturalPoint(-1, -1),
 				new NaturalPoint(1, -1),

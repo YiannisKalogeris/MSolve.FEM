@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MGroup.FEM.Elements.SupportiveClasses;
 using MGroup.FEM.Entities;
@@ -8,12 +8,22 @@ using MGroup.MSolve.Geometry;
 
 namespace MGroup.FEM.Elements
 {
+	/// <summary>
+	/// Defines a Beam2D corotational element.
+	/// </summary>
 	public class Beam2DCorotational : Beam2DCorotationalAbstract
 	{
 		private readonly double[] lastDisplacements;
 		private readonly double[] currentDisplacements;
 		private readonly double[] displacementsOfCurrentIncrement;
 
+		/// <summary>
+		/// Defines a <see cref="Beam2DCorotational"/>.
+		/// </summary>
+		/// <param name="nodes">A list containing the nodes of the <see cref="Beam2DCorotational"/> element.</param>
+		/// <param name="material">The material used for the analysis of the <see cref="Beam2DCorotational"/> element.</param>
+		/// <param name="density">The density of the element.</param>
+		/// <param name="beamSection">The section of beam element.</param>
 		public Beam2DCorotational(IList<Node> nodes, IFiniteElementMaterial material, double density,
 			BeamSection2D beamSection)
 			: base(nodes, material, density, beamSection)
@@ -24,12 +34,19 @@ namespace MGroup.FEM.Elements
 			this.InitializeElementAxes();
 		}
 
+		/// <summary>
+		/// Saves the geometry state of the element.
+		/// </summary>
 		public override void SaveGeometryState()
 		{
 			displacementsOfCurrentIncrement.Scale(0d);
 			lastDisplacements.CopyFrom(currentDisplacements);
 		}
 
+		/// <summary>
+		/// Updates the current state of the element.
+		/// </summary>
+		/// <param name="incrementalNodeDisplacements">A double array containing the incremental load displacements.</param>
 		public override void UpdateState(double[] incrementalNodeDisplacements)
 		{
 			currentDisplacements.CopyFrom(lastDisplacements);

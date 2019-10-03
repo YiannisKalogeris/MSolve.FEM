@@ -1,77 +1,75 @@
-﻿using System;
+using System;
 
 namespace MGroup.FEM.Elements.SupportiveClasses
 {
-	#region
-
-	#endregion
-
+	/// <summary>
+	/// Calculates the jacobian for a given integration point.
+	/// </summary>
 	public class Jacobian3D
 	{
 		#region Constants and Fields
 
 		private const int Dimensions = 3;
 
-		private readonly double determinant;
-
-		private readonly double[,] matrix;
-
 		#endregion
 
 		#region Constructors and Destructors
 
+		/// <summary>
+		/// Defines a <see cref="Jacobian3D"/> object.
+		/// </summary>
+		/// <param name="nodeCoordinates">The nodal coordinates of the element.</param>
+		/// <param name="shapeFunctionDerivatives">The shape functions natural derivatives of a given integration point.</param>
 		public Jacobian3D(double[,] nodeCoordinates, ShapeFunctionNaturalDerivatives3D[] shapeFunctionDerivatives)
 		{
-			this.matrix = CalculateJacobianMatrix(nodeCoordinates, shapeFunctionDerivatives);
-			this.determinant = this.CalculateJacobianDeterminant();
+			this.Matrix = CalculateJacobianMatrix(nodeCoordinates, shapeFunctionDerivatives);
+			this.Determinant = this.CalculateJacobianDeterminant();
 		}
 
 		#endregion
 
 		#region Properties
 
-		public double Determinant
-		{
-			get
-			{
-				return this.determinant;
-			}
-		}
+		/// <summary>
+		/// Returns the jacobian matrix determinant.
+		/// </summary>
+		public double Determinant { get; private set; }
 
-		public double[,] Matrix
-		{
-			get
-			{
-				return this.matrix;
-			}
-		}
+		/// <summary>
+		/// Returns the jacobian matrix.
+		/// </summary>
+		public double[,] Matrix { get; private set; }
 
 		#endregion
 
 		#region Public Methods
 
+		/// <summary>
+		/// Calculates the inverse of teh jacobian matrix.
+		/// </summary>
+		/// <returns>A 2D double array containing the jacobian inverse values.</returns>
 		public double[,] CalculateJacobianInverse()
 		{
 			double[,] jacobianInverse = new double[Dimensions, Dimensions];
-			double determinantInverse = 1.0 / this.determinant;
+			double determinantInverse = 1.0 / this.Determinant;
 
-			jacobianInverse[0, 0] = ((this.matrix[1, 1] * this.matrix[2, 2]) - (this.matrix[2, 1] * this.matrix[1, 2])) *
+			jacobianInverse[0, 0] = ((this.Matrix[1, 1] * this.Matrix[2, 2]) - (this.Matrix[2, 1] * this.Matrix[1, 2])) *
 									determinantInverse;
-			jacobianInverse[0, 1] = ((this.matrix[2, 1] * this.matrix[0, 2]) - (this.matrix[0, 1] * this.matrix[2, 2])) *
+			jacobianInverse[0, 1] = ((this.Matrix[2, 1] * this.Matrix[0, 2]) - (this.Matrix[0, 1] * this.Matrix[2, 2])) *
 									determinantInverse;
-			jacobianInverse[0, 2] = ((this.matrix[0, 1] * this.matrix[1, 2]) - (this.matrix[1, 1] * this.matrix[0, 2])) *
+			jacobianInverse[0, 2] = ((this.Matrix[0, 1] * this.Matrix[1, 2]) - (this.Matrix[1, 1] * this.Matrix[0, 2])) *
 									determinantInverse;
-			jacobianInverse[1, 0] = ((this.matrix[2, 0] * this.matrix[1, 2]) - (this.matrix[1, 0] * this.matrix[2, 2])) *
+			jacobianInverse[1, 0] = ((this.Matrix[2, 0] * this.Matrix[1, 2]) - (this.Matrix[1, 0] * this.Matrix[2, 2])) *
 									determinantInverse;
-			jacobianInverse[1, 1] = ((this.matrix[0, 0] * this.matrix[2, 2]) - (this.matrix[2, 0] * this.matrix[0, 2])) *
+			jacobianInverse[1, 1] = ((this.Matrix[0, 0] * this.Matrix[2, 2]) - (this.Matrix[2, 0] * this.Matrix[0, 2])) *
 									determinantInverse;
-			jacobianInverse[1, 2] = ((this.matrix[1, 0] * this.matrix[0, 2]) - (this.matrix[0, 0] * this.matrix[1, 2])) *
+			jacobianInverse[1, 2] = ((this.Matrix[1, 0] * this.Matrix[0, 2]) - (this.Matrix[0, 0] * this.Matrix[1, 2])) *
 									determinantInverse;
-			jacobianInverse[2, 0] = ((this.matrix[1, 0] * this.matrix[2, 1]) - (this.matrix[2, 0] * this.matrix[1, 1])) *
+			jacobianInverse[2, 0] = ((this.Matrix[1, 0] * this.Matrix[2, 1]) - (this.Matrix[2, 0] * this.Matrix[1, 1])) *
 									determinantInverse;
-			jacobianInverse[2, 1] = ((this.matrix[2, 0] * this.matrix[0, 1]) - (this.matrix[2, 1] * this.matrix[0, 0])) *
+			jacobianInverse[2, 1] = ((this.Matrix[2, 0] * this.Matrix[0, 1]) - (this.Matrix[2, 1] * this.Matrix[0, 0])) *
 									determinantInverse;
-			jacobianInverse[2, 2] = ((this.matrix[0, 0] * this.matrix[1, 1]) - (this.matrix[1, 0] * this.matrix[0, 1])) *
+			jacobianInverse[2, 2] = ((this.Matrix[0, 0] * this.Matrix[1, 1]) - (this.Matrix[1, 0] * this.Matrix[0, 1])) *
 									determinantInverse;
 			return jacobianInverse;
 		}
@@ -99,12 +97,12 @@ namespace MGroup.FEM.Elements.SupportiveClasses
 
 		private double CalculateJacobianDeterminant()
 		{
-			double det1 = this.matrix[0, 0] *
-						  ((this.matrix[1, 1] * this.matrix[2, 2]) - (this.matrix[2, 1] * this.matrix[1, 2]));
-			double det2 = this.matrix[0, 1] *
-						  ((this.matrix[1, 0] * this.matrix[2, 2]) - (this.matrix[2, 0] * this.matrix[1, 2]));
-			double det3 = this.matrix[0, 2] *
-						  ((this.matrix[1, 0] * this.matrix[2, 1]) - (this.matrix[2, 0] * this.matrix[1, 1]));
+			double det1 = this.Matrix[0, 0] *
+						  ((this.Matrix[1, 1] * this.Matrix[2, 2]) - (this.Matrix[2, 1] * this.Matrix[1, 2]));
+			double det2 = this.Matrix[0, 1] *
+						  ((this.Matrix[1, 0] * this.Matrix[2, 2]) - (this.Matrix[2, 0] * this.Matrix[1, 2]));
+			double det3 = this.Matrix[0, 2] *
+						  ((this.Matrix[1, 0] * this.Matrix[2, 1]) - (this.Matrix[2, 0] * this.Matrix[1, 1]));
 
 			double jacobianDeterminant = det1 - det2 + det3;
 

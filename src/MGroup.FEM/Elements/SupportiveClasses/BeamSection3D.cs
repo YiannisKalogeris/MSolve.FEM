@@ -1,10 +1,10 @@
 ﻿namespace MGroup.FEM.Elements.SupportiveClasses
 {
 	/**
-     * Class for three-dimensional beam element sections.
-     *
-     * @author Theofilos Manitaras
-     */
+	 * Class for three-dimensional beam element sections.
+	 *
+	 * @author Theofilos Manitaras
+	 */
 	public class BeamSection3D
 	{
 		private readonly double torsionalInertia;
@@ -15,21 +15,21 @@
 		private readonly double inertiaY;
 
 		/**
-         * Creates a new instance of {@link BeamSection3D} class.
-         *
-         * @param area
-         *            Section area
-         * @param inertiaY
-         *            Moment of inertia on axis Y
-         * @param inertiaZ
-         *            Moment of inertia on axis Z
-         * @param torsionalInertia
-         *            Torsional moment of inertia
-         * @param effectiveAreaY
-         *            The effective area on axis Y
-         * @param effectiveAreaZ
-         *            The effective area on axis Z
-         */
+		 * Creates a new instance of {@link BeamSection3D} class.
+		 *
+		 * @param area
+		 *            Section area
+		 * @param inertiaY
+		 *            Moment of inertia on axis Y
+		 * @param inertiaZ
+		 *            Moment of inertia on axis Z
+		 * @param torsionalInertia
+		 *            Torsional moment of inertia
+		 * @param effectiveAreaY
+		 *            The effective area on axis Y
+		 * @param effectiveAreaZ
+		 *            The effective area on axis Z
+		 */
 		public BeamSection3D(double area, double inertiaY, double inertiaZ, double torsionalInertia, double effectiveAreaY, double effectiveAreaZ)
 		{
 			this.area = area;

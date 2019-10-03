@@ -141,33 +141,33 @@ namespace MGroup.FEM.Tests.Elements
 			double[] displacements =
 			{
 				0.0, 0.0,                    // Node 1
-                0.0, 0.0,                    // Node 2
-                -1.4632E-03, -1.2747E-02     // Node 3  
-            };
+				0.0, 0.0,                    // Node 2
+				-1.4632E-03, -1.2747E-02     // Node 3  
+			};
 
 			// There is only 1 Gauss point.
 			double[][] expectedStrainsAtGPs =
 			{
 				new double[] { -4.8201E-04,  7.4983E-04, -4.1130E-03 }  // Gauss point 1
-            };
+			};
 			double[][] expectedStressesAtGPs =
 			{
 				new double[] { -59.32, 139.7, -332.2 }  // Gauss point 1
-            };
+			};
 
 			// The order of the nodes is the same (at least in this job)
 			double[][] expectedStrainsAtNodes =
 			{
 				new double[] { -4.8201E-04,  7.4983E-04, -4.1130E-03 },  // Node 1
-                new double[] { -4.8201E-04,  7.4983E-04, -4.1130E-03 },  // Node 2
-                new double[] { -4.8201E-04,  7.4983E-04, -4.1130E-03 }   // Node 3
-            };
+				new double[] { -4.8201E-04,  7.4983E-04, -4.1130E-03 },  // Node 2
+				new double[] { -4.8201E-04,  7.4983E-04, -4.1130E-03 }   // Node 3
+			};
 			double[][] expectedStressesAtNodes =
 			{
 				new double[] { -59.32, 139.7, -332.2 },  // Node 1
-                new double[] { -59.32, 139.7, -332.2 },  // Node 2
-                new double[] { -59.32, 139.7, -332.2 }   // Node 3
-            };
+				new double[] { -59.32, 139.7, -332.2 },  // Node 2
+				new double[] { -59.32, 139.7, -332.2 }   // Node 3
+			};
 
 			(IReadOnlyList<double[]> strainsAtGPs, IReadOnlyList<double[]> stressesAtGPs) =
 				tri3.UpdateStrainsStressesAtGaussPoints(displacements);

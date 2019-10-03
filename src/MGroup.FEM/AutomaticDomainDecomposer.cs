@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using MGroup.FEM.Entities;
 
 namespace MGroup.FEM
 {
+	/// <summary>
+	/// The C# implementation of the domain decomposer as described in https://www.sciencedirect.com/science/article/pii/0045794988900041.
+	/// </summary>
 	public class AutomaticDomainDecomposer
 	{
 		private readonly Model Model;
@@ -13,13 +16,21 @@ namespace MGroup.FEM
 		List<Element> ElementsRenumbered = new List<Element>();
 		Dictionary<int, List<Node>> SubdomainInterfaceNodes = new Dictionary<int, List<Node>>();
 
+		/// <summary>
+		/// Defines an <see cref="AutomaticDomainDecomposer"/> object.
+		/// </summary>
+		/// <param name="model">The finit element model to be decomposed.</param>
+		/// <param name="numberOfProcessors">The number of processors at hand.</param>
 		public AutomaticDomainDecomposer(Model model, int numberOfProcessors)
 		{
 			this.NumberOfProcessors = numberOfProcessors;
 			this.Model = model;
 		}
 
-
+		/// <summary>
+		/// Splits the model into subdomains.
+		/// </summary>
+		/// <param name="isColoringEnabled">Boolean that enables coloring.</param>
 		public void UpdateModel(bool isColoringEnabled = false)
 		{
 			Adjacency();
@@ -214,7 +225,6 @@ namespace MGroup.FEM
 
 		}
 
-		//isInteriorBoundaryNode-> if node is on the interior interface
 		private List<Node> CalculateInterface(Dictionary<Node, int> nodeWeight, bool[] isInteriorBoundaryNode,
 			List<Element> ElementsRenumbered, int usedElementsCounter, int counterSubdomainElements, int counterSubdomain)
 		{
@@ -282,7 +292,6 @@ namespace MGroup.FEM
 					return false;
 			return true;
 		}
-
 
 		private List<Element> Purge()
 		{

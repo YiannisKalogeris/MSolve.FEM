@@ -408,8 +408,8 @@ namespace MGroup.FEM.Elements
 			double[,,] faJ = new double[iInt3, 3, 3];
 			double[] faWeight = new double[iInt3];
 			double[] faForces = new double[24];
-			//	CalcQ4GaussMatrices(ref iInt, faXYZ, faWeight, faS, faDS, faJ, faDetJ, faB);
-			//	CalcQ4Forces(ref iInt, faB, faWeight, faStresses, faForces);
+			//  CalcQ4GaussMatrices(ref iInt, faXYZ, faWeight, faS, faDS, faJ, faDetJ, faB);
+			//  CalcQ4Forces(ref iInt, faB, faWeight, faStresses, faForces);
 
 			return faForces;
 		}
