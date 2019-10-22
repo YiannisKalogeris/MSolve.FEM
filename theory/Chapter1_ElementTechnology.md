@@ -123,7 +123,7 @@ In case of quadrilateral elements the same Gauss points are used for both stiffn
 | 0.7745966692414833770358531 | 0.7745966692414833770358531  | 0 | 0.3086419753  |
 
 ### Three-dimensional elements
-The first  element category contains the three-dimensional elements. Below a full list of the elements can be found including their respective local node numbering, gauss integrations for stiffness and mass. The code snippet shows a sample 3D dimensional element creation. 
+The second  element category contains the three-dimensional elements. Below a full list of the elements can be found including their respective local node numbering, gauss integrations for stiffness and mass. The code snippet shows a sample 3D dimensional element creation. 
 
 ```csharp
 var factory = new ContinuumElement3DFactory(Material0, DynamicMaterial0);
@@ -203,20 +203,28 @@ ThermalRod element = new ThermalRod(nodeSet, crossSectionArea, new ThermalMateri
  For this particular case, the conductivity matrix $\boldsymbol{K}$ and the heat capacity matrix $\boldsymbol{C}$ are given by the following equations:
  
 $$ \boldsymbol{K}=\begin{pmatrix} \frac{k A}{l} & -\frac{k A}{l} \\ 
-                                        -\frac{k A}{l} & \frac{k A}{l}$$,
+                                        -\frac{k A}{l} & \frac{k A}{l} \end{pmatrix} $$,
  
 $$ \boldsymbol{C}=\begin{pmatrix} \frac{c \rho A l}{3} & \frac{c \rho A l}{6} \\ 
-                                        \frac{c \rho A l}{6} & \frac{c \rho A l}{3}$$
+                                        \frac{c \rho A l}{6} & \frac{c \rho A l}{3} \end{pmatrix} $$
 
 where $\rho$, $c$,$k$, are the material's density, specific heat capacity and conductivity, respecitvely. Also, $A$ refers to the cross-sectional area of the element and $l$ to its length.
 
 ### Two-dimensional elements
-The second  element category contains the two-dimensional elements. Below a full list of the elements can be found including their respective local node numbering, gauss integrations for stiffness and mass. The code snippet shows a sample 2D dimensional element creation. Initially, a Thermal element factory is generated which is responsible for the element definition. Its parameters are the thickness and the material properties which are considered constant throughout the model.
+The second  element category contains the two-dimensional elements used for 2D heat transfer problems. The element types, their respective local node numbering and gauss integrations for the conductivity matrix and heat capacity matrix are the same as in the 2D structural case. The code snippet shows a sample 2D dimensional element creation. Initially, a Thermal element factory is generated which is responsible for the element definition. Its parameters in this case are the thickness and the material properties which are considered constant throughout the model.
 Then, the specific type of the two-dimensional element is defined by picking an element cell type and providing a list with element nodes.
 
 ```csharp
 var factory = new ThermalElement2DFactory(thickness, new ThermalMaterial(density, specificHeatCoeff, thermalConductivity));
 ThermalElement2D element = factory.CreateElement(CellType.Quad4, nodeSet);
+```
+
+### Three-dimensional elements
+The third  element category contains the three-dimensional elements. The element types, their respective local node numbering and gauss integrations for the conductivity matrix and heat capacity matrix are the same as in the 3D structural case. The code snippet shows a sample 3D dimensional element creation.
+
+```csharp
+var factory = new ThermalElement3DFactory(thickness, new ThermalMaterial(density, specificHeatCoeff, thermalConductivity));
+ThermalElement2D element = factory.CreateElement(CellType.Hexa8, nodeSet);
 ```
 
 ## Structural elements
