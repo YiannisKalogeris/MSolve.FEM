@@ -198,7 +198,7 @@ This category contains the types of finite elements used to solve the heat trans
 The first category contains the **ThermalRod** element which is used for problems where heat transfer occurs in only one direction. The code snippet shows sample of the creation of a **ThermalRod** element. Its parameters are the nodal coordindates of the start and end node, the cross-sectional area and the material properties.
 
 ```csharp
-ThermalRod element = new ThermalRod(nodeSet0, crossSectionArea, new ThermalMaterial(density, specialHeatCoeff, thermalConductivity));
+ThermalRod element = new ThermalRod(nodeSet, crossSectionArea, new ThermalMaterial(density, specificHeatCoeff, thermalConductivity));
 ```
  For this particular case, the conductivity matrix $\boldsymbol{K}$ and the heat capacity matrix $\boldsymbol{C}$ are given by the following equations:
  
@@ -211,6 +211,13 @@ $$ \boldsymbol{C}=\begin{pmatrix} \frac{c \rho A l}{3} & \frac{c \rho A l}{6} \\
 where $\rho$, $c$,$k$, are the material's density, specific heat capacity and conductivity, respecitvely. Also, $A$ refers to the cross-sectional area of the element and $l$ to its length.
 
 ### Two-dimensional elements
+The second  element category contains the two-dimensional elements. Below a full list of the elements can be found including their respective local node numbering, gauss integrations for stiffness and mass. The code snippet shows a sample 2D dimensional element creation. Initially, a Thermal element factory is generated which is responsible for the element definition. Its parameters are the thickness and the material properties which are considered constant throughout the model.
+Then, the specific type of the two-dimensional element is defined by picking an element cell type and providing a list with element nodes.
+
+```csharp
+var factory = new ThermalElement2DFactory(thickness, new ThermalMaterial(density, specificHeatCoeff, thermalConductivity));
+ThermalElement2D element = factory.CreateElement(CellType.Quad4, nodeSet);
+```
 
 ## Structural elements
 
