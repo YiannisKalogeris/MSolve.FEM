@@ -1,9 +1,10 @@
+{% include mathjax.html %}
 # Element technology
 
 A summary of the basic elements og **MSolve.FEM** is provided.
 
 ## Continuum elements
-This category contains structural elements with transitional olny degrees of freedom. These elements are split into two categories, two-dimensional and three-dimensioanl respectively depending on dimensionality of the model.
+This category contains structural elements with transitional olny degrees of freedom. These elements are split into two categories, two-dimensional and three-dimensional respectively depending on dimensionality of the model.
 
 
 
@@ -29,7 +30,7 @@ For the stiffness integration of the Tri3 element an one-point integration is su
 |-----|-----|---|-----|
 | 1/3 | 1/3 | 0 | 0.5 | 
 
-For the mass integration of the Tri3 element an three-point integration is needed.
+For the mass integration of the Tri3 element a three-point integration is needed.
 
 **GaussPoints for mass:**
 
@@ -190,8 +191,26 @@ var tet4 = factory.CreateElement(CellType.Tet4, NodeSet0);
 </p>
 
 
+## Thermal elements
+This category contains the types of finite elements used to solve the heat transfer problem. These elements are split into three categories, one-, two- and three-dimensional, depending on the dimensionality of the problem. 
 
+### One-dimensional element
+The first category contains the **ThermalRod** element which is used for problems where heat transfer occurs in only one direction. The code snippet shows sample of the creation of a **ThermalRod** element. Its parameters are the nodal coordindates of the start and end node, the cross-sectional area and the material properties.
 
+```csharp
+ThermalRod element = new ThermalRod(nodeSet0, crossSectionArea, new ThermalMaterial(density, specialHeatCoeff, thermalConductivity));
+```
+ For this particular case, the conductivity matrix $\boldsymbol{K}$ and the heat capacity matrix $\boldsymbol{C}$ are given by the following equations:
+ 
+$$ \boldsymbol{K}=\begin{pmatrix} \frac{k A}{l} & -\frac{k A}{l} \\ 
+                                        -\frac{k A}{l} & \frac{k A}{l}$$,
+ 
+$$ \boldsymbol{C}=\begin{pmatrix} \frac{c \rho A l}{3} & \frac{c \rho A l}{6} \\ 
+                                        \frac{c \rho A l}{6} & \frac{c \rho A l}{3}$$
+
+where $\rho$, $c$,$k$, are the material's density, specific heat capacity and conductivity, respecitvely. Also, $A$ refers to the cross-sectional area of the element and $l$ to its length.
+
+### Two-dimensional elements
 
 ## Structural elements
 
